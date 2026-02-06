@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\Auth;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -16,10 +17,10 @@ class TaskController extends Controller
     public function index(Request $request)
     {
         $tasks = QueryBuilder::for(
-                Task::query()->where('user_id', $request->user()->id)
+                Auth::user()->tasks()
             )
             ->allowedIncludes(['category'])
-            ->allowedSorts(['created_at', 'due_date', 'priority', 'status'])
+            ->allowedSorts(['created_at', 'priority', 'status'])
             ->allowedFilters([
                 AllowedFilter::partial('description'),
                 AllowedFilter::exact('status'),

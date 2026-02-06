@@ -6,9 +6,7 @@ use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Auth as FacadesAuth;
 
 class CategoryController extends Controller
 {
@@ -19,7 +17,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::where('user_id',Auth::id())
+        $categories = Auth::user()->categories()
         ->withCount('tasks')
         ->orderBy('id','asc')
         ->get();
@@ -31,9 +29,8 @@ class CategoryController extends Controller
      */
     public function store(StoreCategoryRequest $request)
     {
-        $categories = Category::create([
+        $categories = Auth::user()->categories()->create([
             'name'=>$request->validated('name'),
-            'user_id'=>Auth::id(),
         ]);
         return response()->json(['message'=>'Category created successfully',
                                         'Categories'=> $categories],
