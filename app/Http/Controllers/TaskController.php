@@ -10,6 +10,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
+use App\Http\Resources\TaskResource;
 
 class TaskController extends Controller
 {
@@ -28,8 +29,7 @@ class TaskController extends Controller
                 AllowedFilter::exact('category_id'),
                 AllowedFilter::partial('category.name'),
             ]);
-
-        return response()->json($tasks->get());
+            return TaskResource::collection($tasks->get());
     }
 
     public function store(StoreTaskRequest $request)
@@ -41,7 +41,7 @@ class TaskController extends Controller
 
         return response()->json([
             'message' => 'Task created successfully.',
-            'data' => $task,
+            'data' => new TaskResource($task),
         ], 201);
     }
 
@@ -50,7 +50,7 @@ class TaskController extends Controller
         $this->authorize('modify', $task);
         $task->load('category');
         return response()->json([
-            'data' => $task,
+            'data' => new TaskResource($task),
         ]);
     }
 
@@ -61,7 +61,7 @@ class TaskController extends Controller
         $task->load('category');
         return response()->json([
             'message' => 'Task updated successfully.',
-            'data' => $task,
+            'data' => new TaskResource($task),
         ]);
     }
 

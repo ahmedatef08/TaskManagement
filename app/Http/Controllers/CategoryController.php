@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
+use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
@@ -21,9 +22,8 @@ class CategoryController extends Controller
         ->withCount('tasks')
         ->orderBy('id','asc')
         ->get();
-        return response()->json(['data' => $categories]);
+        return CategoryResource::collection($categories);
     }
-
     /**
      * Store a newly created resource in storage.
      */
@@ -33,7 +33,7 @@ class CategoryController extends Controller
             'name'=>$request->validated('name'),
         ]);
         return response()->json(['message'=>'Category created successfully',
-                                        'Categories'=> $categories],
+                                        'data'=> new CategoryResource($categories)],
                                         201);
     }
 
@@ -44,7 +44,7 @@ class CategoryController extends Controller
     {
         $this->authorize('modify',$category);
         $category->loadCount('tasks');
-        return response()->json(['data' => $category]);
+        return response()->json(['data' => new CategoryResource($category)]);
     }
 
     /**
@@ -57,7 +57,7 @@ class CategoryController extends Controller
             'name'=>$request->validated('name'),
         ]);
         return response()->json(['message'=>'Category updated successfully',
-                                        'Category'=> $category],
+                                        'data'=> new CategoryResource($category)],
                                         200);
     }
 
