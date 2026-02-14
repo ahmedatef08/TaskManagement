@@ -4,12 +4,31 @@ namespace App\Policies;
 
 use App\Models\Category;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class CategoryPolicy
 {
-    public function modify(User $user, Category $category): Response
+    public function create(User $user): bool
     {
-        return $user->id === $category->user_id? Response::allow() : Response::deny('You do not own this category.', 403);
+        return $user->is_admin;
+    }
+    public function viewAny(User $user): bool
+    {
+        return $user->is_admin || true;
+    }
+
+    public function view(User $user, Category $category): bool
+    {
+        return $user->is_admin || $category->user_id === $user->id;
+    }
+
+    public function update(User $user, Category $category): bool
+    {
+        return $user->is_admin || $category->user_id === $user->id;
+    }
+
+    public function delete(User $user, Category $category): bool
+    {
+        return $user->is_admin || $category->user_id === $user->id;
     }
 }
+

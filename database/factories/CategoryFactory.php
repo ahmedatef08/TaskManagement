@@ -3,7 +3,9 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Database\Factories\UserFactory as User;
+use App\Models\Category;
+use App\Models\User;
+
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Category>
@@ -15,11 +17,12 @@ class CategoryFactory extends Factory
      *
      * @return array<string, mixed>
      */
+    protected $model = Category::class;
     public function definition(): array
     {
         return [
-            'name' => $this->faker->word(),
-            'user_id' => User::factory(),
+            'name' => $this->faker->randomElement(['Work','Personal','Study']),
+            'user_id' => User::inRandomOrder()->value('id'),
         ];
     }
 }

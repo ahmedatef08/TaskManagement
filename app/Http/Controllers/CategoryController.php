@@ -42,7 +42,7 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        $this->authorize('modify',$category);
+        $this->authorize('view',$category);
         $category->loadCount('tasks');
         return response()->json(['data' => new CategoryResource($category)]);
     }
@@ -52,7 +52,7 @@ class CategoryController extends Controller
      */
     public function update(UpdateCategoryRequest $request, Category $category)
     {
-        $this->authorize('modify',$category);
+        $this->authorize('update',$category);
         $category->update([
             'name'=>$request->validated('name'),
         ]);
@@ -66,7 +66,7 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        $this->authorize('modify',$category);
+        $this->authorize('delete',$category);
         $category->delete();
         return response()->json(['message'=>'Category deleted successfully'],200);
     }

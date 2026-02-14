@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\AdminRequestController;
 use App\Models\Category;
 use App\Models\Task;
 use Illuminate\Http\Request;
@@ -22,3 +23,4 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::apiResource('categories',CategoryController::class);
 });
 
+Route::post('/admin-requests/delete-task', [AdminRequestController::class, 'requestdeleteTask'])->middleware('auth:sanctum');
