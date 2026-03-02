@@ -19,11 +19,11 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             TaskSeeder::class,
         ]);
-        User::factory(3)->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => bcrypt('123456789'),
-            'is_admin' => false,
-        ]);
+        // User::factory(3)->create([
+        //     'name' => 'Test User',
+        //     'email' => 'test@example.com',
+        //     'password' => bcrypt('123456789'),
+        //     'is_admin' => false,
+        // ]);
     }
 }
